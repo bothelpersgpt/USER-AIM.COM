@@ -94,6 +94,14 @@ async function updateGameInformation() {
         usernameDiv.id = 'usernameDiv';
         usernameDiv.textContent = `Logged in as: ${fetchedUsername}`;
         document.body.appendChild(usernameDiv);
+
+        // Check if the username is correct and display a message
+        const correctUsername = await checkCorrectUsername(fetchedUsername);
+        if (correctUsername) {
+            alert('Username is correct!');
+        } else {
+            alert('Username is incorrect!');
+        }
     } else {
         // If the username is not available, show default message
         gameInfoContainer.innerHTML = `
@@ -101,6 +109,23 @@ async function updateGameInformation() {
             <p>Sorry, this game isn't ready for launch yet. Please check back later for updates.</p>
             <p><strong>Developed by:</strong> BloxiaIam</p>
         `;
+    }
+}
+
+// Function to check if the fetched username is correct
+async function checkCorrectUsername(username) {
+    // Replace 'exampleCode' with the actual code you want to check
+    const exampleCode = '252500';
+
+    try {
+        const response = await fetch(`https://user-aim.page-home.workers.dev/checkcode?code=${exampleCode}&username=${username}`);
+        const data = await response.json();
+
+        // Return true if the username is correct, otherwise return false
+        return data.correct;
+    } catch (error) {
+        console.error('Error checking correct username:', error);
+        return false;
     }
 }
 
