@@ -14,6 +14,27 @@ async function fetchUserFromExternalWebsite(username) {
     }
 }
 
+// Function to fetch the code from the external website
+async function fetchCodeFromExternalWebsite() {
+    try {
+        // Replace 'usernameToCheck' with the actual username you want to check
+        const usernameToCheck = 'exampleUsername';
+        
+        // Check if the user exists on the external website
+        const userInformation = await fetchUserFromExternalWebsite(usernameToCheck);
+
+        if (userInformation) {
+            // User exists, return the username
+            return userInformation.username;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching code:', error);
+        return null;
+    }
+}
+
 // Function to create and show a div with the fetched username and account status
 async function showUsernameDiv() {
     // Replace 'exampleUsername' with the actual username you want to check
@@ -47,5 +68,44 @@ async function showUsernameDiv() {
     document.body.appendChild(usernameDiv);
 }
 
+// Function to update game information with the fetched username
+async function updateGameInformation() {
+    // Get the game info container
+    const gameInfoContainer = document.querySelector('.game-info');
+    
+    // Fetch the username from the external website
+    const fetchedUsername = await fetchCodeFromExternalWebsite();
+
+    // Update the game information with the fetched username
+    if (fetchedUsername) {
+        // Update the welcome message with the fetched username
+        const welcomeMessage = document.getElementById('profileUsername');
+        if (welcomeMessage) {
+            welcomeMessage.textContent = fetchedUsername;
+        }
+
+        gameInfoContainer.innerHTML = `
+            <h2>Welcome, <span id="profileUsername">${fetchedUsername}</span>! This game isn't ready for launch yet. Please check back later for updates.</h2>
+            <p><strong>Developed by:</strong> BloxiaIam</p>
+        `;
+
+        // Create and show a div to display the username
+        const usernameDiv = document.createElement('div');
+        usernameDiv.id = 'usernameDiv';
+        usernameDiv.textContent = `Logged in as: ${fetchedUsername}`;
+        document.body.appendChild(usernameDiv);
+    } else {
+        // If the username is not available, show default message
+        gameInfoContainer.innerHTML = `
+            <h2>Game exxx</h2>
+            <p>Sorry, this game isn't ready for launch yet. Please check back later for updates.</p>
+            <p><strong>Developed by:</strong> BloxiaIam</p>
+        `;
+    }
+}
+
 // Automatically show the username div when the page loads
 document.addEventListener('DOMContentLoaded', showUsernameDiv);
+
+// Automatically update the game information when the page loads
+document.addEventListener('DOMContentLoaded', updateGameInformation);
