@@ -3,7 +3,7 @@
 // Function to fetch the code from the external website
 async function fetchCodeFromExternalWebsite() {
     try {
-        const response = await fetch('https://user-aim.page-home.workers.dev/getcode'); // Replace with the actual URL
+        const response = await fetch('https://your-external-website.com/getcode'); // Replace with the actual URL
         const data = await response.json();
 
         if (data.code === 252500) {
@@ -18,30 +18,28 @@ async function fetchCodeFromExternalWebsite() {
     }
 }
 
-// Function to update game information with the fetched username
-async function updateGameInformation() {
-    // Get the game info container
-    const gameInfoContainer = document.querySelector('.game-info');
-
+// Function to create and show a div with the fetched username
+async function showUsernameDiv() {
     // Fetch the username from the external website
     const fetchedUsername = await fetchCodeFromExternalWebsite();
 
-    // Update the game information with the fetched username
-    if (fetchedUsername) {
-        gameInfoContainer.innerHTML = `
-            <h2>Game exxx</h2>
-            <p>Welcome, ${fetchedUsername}! This game isn't ready for launch yet. Please check back later for updates.</p>
-            <p><strong>Developed by:</strong> BloxiaIam</p>
-        `;
-    } else {
-        // If the username is not available, show default message
-        gameInfoContainer.innerHTML = `
-            <h2>Game exxx</h2>
-            <p>Sorry, this game isn't ready for launch yet. Please check back later for updates.</p>
-            <p><strong>Developed by:</strong> BloxiaIam</p>
-        `;
-    }
+    // Create a div to display the username
+    const usernameDiv = document.createElement('div');
+    usernameDiv.id = 'usernameDiv';
+    usernameDiv.textContent = `Logged in as: ${fetchedUsername || 'Guest'}`; // Default to 'Guest' if no username
+
+    // Style the div (you can customize these styles)
+    usernameDiv.style.position = 'fixed';
+    usernameDiv.style.bottom = '10px';
+    usernameDiv.style.left = '10px';
+    usernameDiv.style.backgroundColor = '#3498db';
+    usernameDiv.style.color = '#fff';
+    usernameDiv.style.padding = '10px';
+    usernameDiv.style.borderRadius = '5px';
+
+    // Append the div to the body
+    document.body.appendChild(usernameDiv);
 }
 
-// Automatically update game information when the page loads
-document.addEventListener('DOMContentLoaded', updateGameInformation);
+// Automatically show the username div when the page loads
+document.addEventListener('DOMContentLoaded', showUsernameDiv);
